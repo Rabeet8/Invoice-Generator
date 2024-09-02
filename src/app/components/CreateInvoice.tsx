@@ -7,13 +7,34 @@ import { db } from "@/app/lib/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { GeneratePdf } from "./GeneratePdf";
 
+// Define the type for individual items
+type Item = {
+  description: string;
+  unitPrice: string;
+};
+
+// Define the type for the invoice data
+type InvoiceData = {
+  invoice: string;
+  companyName: string;
+  clientName: string;
+  clientPhone: string;
+  clientEmail: string;
+  issueDate: string;
+  dueDate: string;
+  accountTitle: string;
+  bankName: string;
+  bankAccount: string;
+  items: Item[];
+};
+
 export function CreateInvoice() {
-  const [items, setItems] = useState([{ description: "", unitPrice: "" }]);
+  const [items, setItems] = useState<Item[]>([{ description: "", unitPrice: "" }]);
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleItemChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const newItems = [...items];
-    newItems[index][e.target.name] = e.target.value;
+    newItems[index][e.target.name as keyof Item] = e.target.value;
     setItems(newItems);
   };
 
@@ -29,7 +50,7 @@ export function CreateInvoice() {
 
   const handleGenerateInvoice = async () => {
     // Gather input values
-    const data = {
+    const data: InvoiceData = {
       invoice: (document.getElementById("invoice") as HTMLInputElement).value,
       companyName: (document.getElementById("companyName") as HTMLInputElement).value,
       clientName: (document.getElementById("firstname") as HTMLInputElement).value,
@@ -158,8 +179,8 @@ export function CreateInvoice() {
             Generate Invoice
           </button>
           {successMessage && (
-          <div className="text-green-600 text-center mb-4">{successMessage}</div>
-        )}
+            <div className="text-green-600 text-center mb-4">{successMessage}</div>
+          )}
         </div>
       </div>
     </div>
