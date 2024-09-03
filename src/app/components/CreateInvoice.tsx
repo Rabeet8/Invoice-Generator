@@ -20,7 +20,9 @@ export function CreateInvoice() {
     const newItems = [...items];
     newItems[index][e.target.name as keyof Item] = e.target.value;
     setItems(newItems);
-  };
+  };
+  
+  
 
   const addItem = () => {
     setItems([...items, { description: "", unitPrice: "" }]);
