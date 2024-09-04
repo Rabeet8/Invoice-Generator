@@ -67,7 +67,7 @@ export function CreateInvoice() {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="max-w-lg w-full text-white shadow-md rounded-lg p-6 space-y-6 border border-gray-700 bg-white">
-        <h2 className="text-2xl text-black font-semibold text-center">Create Invoice</h2>
+        <h2 className="text-2xl text-black font-semibold text-center">Create Invoiceeee</h2>
 
         <div className="space-y-4">
           <LabelInputContainer>
