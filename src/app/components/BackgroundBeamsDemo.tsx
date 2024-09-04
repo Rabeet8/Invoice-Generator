@@ -13,8 +13,7 @@ export function BackgroundBeamsDemo() {
         <p className="text-neutral-500 max-w-lg mx-auto my-4 text-md">
           Streamline your invoicing with simplicity and style.
         </p>
-        <p className="text-neutral-500 max-w-lg mx-auto my-4 text-md">
-Made by Talhaverse ♥️        </p>
+        
         <div className="flex justify-center">
           <Link href="/create-invoice" className="rounded-lg border border-neutral-400 bg-neutral-950 text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 px-6 py-2 text-lg font-semibold transition duration-150 ease-in-out">
             Create Invoice
