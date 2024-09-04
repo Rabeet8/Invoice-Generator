@@ -37,7 +37,7 @@ export const GeneratePdf = (data: any) => {
   const tableRows = data.items.map((item: any, index: number) => [
     (index + 1).toString(),
     item.description || "N/A",
-    `$${item.unitPrice || "0.00"}`,
+    `£${item.unitPrice || "0.00"}`,
   ]);
 
   const total = data.items.reduce((sum: number, item: any) => sum + parseFloat(item.unitPrice || "0"), 0);
