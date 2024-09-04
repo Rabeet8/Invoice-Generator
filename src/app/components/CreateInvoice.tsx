@@ -11,11 +11,16 @@ export function CreateInvoice() {
   const [items, setItems] = useState([{ description: "", unitPrice: "" }]);
   const [successMessage, setSuccessMessage] = useState("");
 
+  interface Item {
+    description: string;
+    unitPrice: string;
+  }
+  
   const handleItemChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const newItems = [...items];
-    newItems[index][e.target.name] = e.target.value;
+    newItems[index][e.target.name as keyof Item] = e.target.value;
     setItems(newItems);
-  };
+  };
 
   const addItem = () => {
     setItems([...items, { description: "", unitPrice: "" }]);
