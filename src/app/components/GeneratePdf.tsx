@@ -57,7 +57,7 @@ export const GeneratePdf = (data: any) => {
 
       // Add Total
       doc.setFontSize(12);
-      doc.text(`Total: $${total.toFixed(2)}`, 190, finalY + 10, { align: 'right' });
+      doc.text(`Total: £${total.toFixed(2)}`, 190, finalY + 10, { align: 'right' });
 
       // Draw another line
       doc.setLineWidth(0.5);
