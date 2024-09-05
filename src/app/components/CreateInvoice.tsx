@@ -156,7 +156,7 @@ export function CreateInvoice() {
                 name="currency"
                 value={item.currency}
                 onChange={(e) => handleItemChange(index, e)}
-                className="border rounded-md px-2 py-1 bg-white text-black"
+                className="border rounded-md px-2 py-1 bg-white text-black h-[2.8rem]"
               >
                 <option value="$">$</option>
                 <option value="£">£</option>
@@ -167,7 +167,7 @@ export function CreateInvoice() {
             <button
               type="button"
               onClick={() => removeItem(index)}
-              className="text-red-500 hover:text-red-700 focus:outline-none"
+              className="text-sm text-red-500 hover:text-red-700 focus:outline-none"
             >
               Remove
             </button>
