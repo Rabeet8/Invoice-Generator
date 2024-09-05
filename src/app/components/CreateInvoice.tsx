@@ -8,24 +8,24 @@ import { collection, addDoc } from "firebase/firestore";
 import { GeneratePdf } from "./GeneratePdf";
 
 export function CreateInvoice() {
-  const [items, setItems] = useState([{ description: "", unitPrice: "" }]);
+  const [items, setItems] = useState([{ description: "", unitPrice: "",currency: ""  }]);
   const [successMessage, setSuccessMessage] = useState("");
 
   interface Item {
     description: string;
     unitPrice: string;
+    currency: string;
   }
   
-  const handleItemChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleItemChange = (index: number, e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const newItems = [...items];
     newItems[index][e.target.name as keyof Item] = e.target.value;
     setItems(newItems);
-  };
-  
+};
   
 
   const addItem = () => {
-    setItems([...items, { description: "", unitPrice: "" }]);
+    setItems([...items, { description: "", unitPrice: "",currency: ""  }]);
   };
 
   const removeItem = (index: number) => {
@@ -70,6 +70,7 @@ export function CreateInvoice() {
         <h2 className="text-2xl text-black font-semibold text-center">Create Invoice</h2>
 
         <div className="space-y-4">
+        <div className="flex space-x-4">
           <LabelInputContainer>
             <Label htmlFor="invoice">Invoice Number</Label>
             <Input id="invoice" name="invoice" placeholder="0001" type="text" />
@@ -78,6 +79,8 @@ export function CreateInvoice() {
             <Label htmlFor="companyName">Company Name</Label>
             <Input id="companyName" name="companyName" placeholder="Your Company" type="text" />
           </LabelInputContainer>
+          </div>
+          <div className="flex space-x-4">
           <LabelInputContainer>
             <Label htmlFor="firstname">Client's Name</Label>
             <Input id="firstname" name="firstname" placeholder="Tyler" type="text" />
@@ -86,6 +89,8 @@ export function CreateInvoice() {
             <Label htmlFor="number"> Phone Number</Label>
             <Input id="number" name="number" placeholder="0123456789" type="tel" />
           </LabelInputContainer>
+          </div>
+          <div className="flex space-x-4">
           <LabelInputContainer>
             <Label htmlFor="email">Email Address</Label>
             <Input id="email" name="email" placeholder="projectmayhem@fc.com" type="email" />
@@ -94,6 +99,8 @@ export function CreateInvoice() {
             <Label htmlFor="accountTitle">Account Title</Label>
             <Input id="accountTitle" name="accountTitle" placeholder="Your Account Title" type="text" />
           </LabelInputContainer>
+          </div>
+          <div className="flex space-x-4">
           <LabelInputContainer>
             <Label htmlFor="bankName">Bank Name</Label>
             <Input id="bankName" name="bankName" placeholder="Your Bank Name" type="text" />
@@ -102,52 +109,70 @@ export function CreateInvoice() {
             <Label htmlFor="bankAccount">Bank Account</Label>
             <Input id="bankAccount" name="bankAccount" placeholder="Your Bank Account" type="text" />
           </LabelInputContainer>
-          <div className="flex space-x-4">
-            <LabelInputContainer>
-              <Label htmlFor="issuedate">Invoice Issue Date</Label>
-              <Input id="issuedate" name="issuedate" type="date" />
-            </LabelInputContainer>
-            <LabelInputContainer>
-              <Label htmlFor="duedate">Invoice Due Date</Label>
-              <Input id="duedate" name="duedate" type="date" />
-            </LabelInputContainer>
           </div>
+            <div className="flex space-x-4">
+            <LabelInputContainer className="flex-1">
+            <Label htmlFor="issuedate">Invoice Issue Date</Label>
+              <Input id="issuedate" name="issuedate" type="date" />
+              </LabelInputContainer>
+              <LabelInputContainer className="flex-1">
+                <Label htmlFor="duedate">Invoice Due Date</Label>
+                <Input id="duedate" name="duedate" type="date" />
+              </LabelInputContainer>
+            </div>
 
           <h3 className="text-lg text-black font-medium">Items/Services</h3>
 
           {items.map((item, index) => (
-            <div key={index} className="flex space-x-4 items-center">
-              <LabelInputContainer className="flex-1">
-                <Label htmlFor={`itemDescription-${index}`}>Description</Label>
-                <Input
-                  id={`itemDescription-${index}`}
-                  name="description"
-                  placeholder="Consulting Services"
-                  type="text"
-                  value={item.description}
-                  onChange={(e) => handleItemChange(index, e)}
-                />
-              </LabelInputContainer>
-              <LabelInputContainer className="flex-1">
-                <Label htmlFor={`unitPrice-${index}`}>Unit Price</Label>
-                <Input
-                  id={`unitPrice-${index}`}
-                  name="unitPrice"
-                  placeholder="100"
-                  type="number"
-                  value={item.unitPrice}
-                  onChange={(e) => handleItemChange(index, e)}
-                />
-              </LabelInputContainer>
-              <button
-                type="button"
-                onClick={() => removeItem(index)}
-                className="text-red-500 hover:text-red-700 focus:outline-none"
+          <div key={index} className="flex space-x-4 items-center">
+            <LabelInputContainer className="flex-[3]">  {/* Increase flex value for description */}
+              <Label htmlFor={`itemDescription-${index}`}>Description</Label>
+              <Input
+                id={`itemDescription-${index}`}
+                name="description"
+                placeholder="Consulting Services"
+                type="text"
+                value={item.description}
+                onChange={(e) => handleItemChange(index, e)}
+              />
+            </LabelInputContainer>
+
+            <LabelInputContainer className="flex-[1]">  {/* Decrease flex value for unit price */}
+              <Label htmlFor={`unitPrice-${index}`}>Unit Price</Label>
+              <Input
+                id={`unitPrice-${index}`}
+                name="unitPrice"
+                placeholder="100"
+                type="number"
+                value={item.unitPrice}
+                onChange={(e) => handleItemChange(index, e)}
+              />
+            </LabelInputContainer>
+
+            <LabelInputContainer className="flex-[1]">  {/* Decrease flex value for currency */}
+              <Label htmlFor={`currency-${index}`}>Currency</Label>
+              <select
+                id={`currency-${index}`}
+                name="currency"
+                value={item.currency}
+                onChange={(e) => handleItemChange(index, e)}
+                className="border rounded-md px-2 py-1 bg-white text-black"
               >
-                Remove
-              </button>
-            </div>
-          ))}
+                <option value="$">$</option>
+                <option value="£">£</option>
+                <option value="PKR">PKR</option>
+              </select>
+            </LabelInputContainer>
+
+            <button
+              type="button"
+              onClick={() => removeItem(index)}
+              className="text-red-500 hover:text-red-700 focus:outline-none"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
 
           <button
             type="button"
@@ -165,8 +190,8 @@ export function CreateInvoice() {
             Generate Invoice
           </button>
           {successMessage && (
-          <div className="text-green-600 text-center mb-4">{successMessage}</div>
-        )}
+            <div className="text-green-600 text-center mb-4">{successMessage}</div>
+          )}
         </div>
       </div>
     </div>
