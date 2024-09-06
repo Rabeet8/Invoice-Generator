@@ -10,7 +10,7 @@ import { GeneratePdf } from "./GeneratePdf";
 export function CreateInvoice() {
   const [items, setItems] = useState([{ description: "", unitPrice: "",currency: ""  }]);
   const [successMessage, setSuccessMessage] = useState("");
-
+  const [image, setImage] = useState<File | null>(null);
   interface Item {
     description: string;
     unitPrice: string;
@@ -23,6 +23,11 @@ export function CreateInvoice() {
     setItems(newItems);
 };
   
+const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (e.target.files && e.target.files[0]) {
+    setImage(e.target.files[0]);
+  }
+};
 
   const addItem = () => {
     setItems([...items, { description: "", unitPrice: "",currency: ""  }]);
@@ -58,7 +63,7 @@ export function CreateInvoice() {
       console.log("Document written with ID: ", docRef.id);
       
       // Generate PDF after data is submitted
-      GeneratePdf(data);
+      GeneratePdf(data, image);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -120,7 +125,13 @@ export function CreateInvoice() {
                 <Input id="duedate" name="duedate" type="date" />
               </LabelInputContainer>
             </div>
-
+            <div className="flex space-x-4">
+            <LabelInputContainer>
+            <Label htmlFor="invoiceImage">Company logo</Label>
+            <Input id="invoiceImage" name="invoiceImage" type="file" accept="image/*" onChange={handleImageChange} />
+          </LabelInputContainer>
+          
+          </div>
           <h3 className="text-lg text-black font-medium">Items/Services</h3>
 
           {items.map((item, index) => (
@@ -135,7 +146,7 @@ export function CreateInvoice() {
                 value={item.description}
                 onChange={(e) => handleItemChange(index, e)}
               />
-            </LabelInputContainer>
+            </LabelInputContainer> 
 
             <LabelInputContainer className="flex-[1]">  {/* Decrease flex value for unit price */}
               <Label htmlFor={`unitPrice-${index}`}>Unit Price</Label>
@@ -158,6 +169,7 @@ export function CreateInvoice() {
                 onChange={(e) => handleItemChange(index, e)}
                 className="border rounded-md px-2 py-1 bg-white text-black h-[2.8rem]"
               >
+                  <option value="" className="text-gray-400 text-xs">Symbol</option>
                 <option value="$">$</option>
                 <option value="£">£</option>
                 <option value="PKR">PKR</option>

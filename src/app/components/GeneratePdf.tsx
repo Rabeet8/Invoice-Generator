@@ -1,32 +1,44 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
-export const GeneratePdf = (data: any) => {
-  console.log("Data received in GeneratePdf:", data);
-
+export const GeneratePdf = (data: any, imageFile: File | null) => {
   const doc = new jsPDF();
 
-  // Title and Company Info
+  // Page width
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Define dimensions for the logo
+  const logoWidth = 15;
+  const logoHeight = 10;
+  const logoX = pageWidth - 30; // Right-align the logo
+  const logoY = 12;
+
+  // Add the title "Invoice" on the left
   doc.setFontSize(24);
   doc.text("Invoice", 10, 20);
 
-  doc.setFontSize(18);
-  doc.text(data.companyName || "N/A", 190, 20, { align: "right" });
+  // Company name and phone number to the right
+  const companyNameX = pageWidth - 60; // Right-aligned company name
+  const companyNameY = 20;  // Align with the logo height
 
-  // Add Phone Number
-  doc.setFontSize(14);
-  doc.text(`Phone: ${data.clientPhone || "N/A"}`, 190, 30, { align: "right" });
+  doc.setFontSize(18);
+  doc.text(data.companyName || "N/A", companyNameX, companyNameY);
+
+  // Phone number beneath the company name
+  doc.setFontSize(12);
+  const phoneNumberY = companyNameY + 10; // Slightly lower than the company name
+  doc.text(`Phone: ${data.clientPhone || "N/A"}`, companyNameX, phoneNumberY);
 
   // Draw a line
   doc.setLineWidth(0.5);
   doc.line(10, 35, 200, 35);
 
-  // Invoice Details
+  // Invoice details
   doc.setFontSize(12);
   doc.text(`Invoice Number: ${data.invoice || "N/A"}`, 10, 50);
   doc.text(`Client Name: ${data.clientName || "N/A"}`, 10, 60);
-  doc.text(`Issue Date: ${data.issueDate || "N/A"}`, 160, 50, { align: "right" });
-  doc.text(`Due Date: ${data.dueDate || "N/A"}`, 160, 60, { align: "right" });
+  doc.text(`Issue Date: ${data.issueDate || "N/A"}`, pageWidth - 20, 50, { align: "right" });
+  doc.text(`Due Date: ${data.dueDate || "N/A"}`, pageWidth - 20, 60, { align: "right" });
 
   // Draw another line
   doc.setLineWidth(0.5);
@@ -37,16 +49,15 @@ export const GeneratePdf = (data: any) => {
   const tableRows = data.items.map((item: any, index: number) => [
     (index + 1).toString(),
     item.description || "N/A",
-    `${item.currency === "£" ? "£" : item.currency}${item.unitPrice || "0.00"}`, // Manually ensure the symbol is correctly inserted
+    `${item.currency === "£" ? "£" : item.currency}${item.unitPrice || "0.00"}`,
   ]);
+
+  const { accountTitle, bankName, bankAccount } = data;
 
   const total = data.items.reduce(
     (sum: number, item: any) => sum + parseFloat(item.unitPrice || "0"),
     0
   );
-
-  // Capture additional data before passing to autoTable
-  const { accountTitle, bankName, bankAccount } = data;
 
   (doc as any).autoTable({
     head: [tableColumn],
@@ -60,19 +71,13 @@ export const GeneratePdf = (data: any) => {
 
       // Add Total
       doc.setFontSize(12);
-      doc.text(`Total: ${total.toFixed(2)}`, 190, finalY + 10, { align: "right" });
+      doc.text(`Total: ${total.toFixed(2)}`, pageWidth - 10, finalY + 10, { align: "right" });
 
       // Draw another line
       doc.setLineWidth(0.5);
       doc.line(10, finalY + 15, 200, finalY + 15);
 
-      // Use captured data here
-      console.log("Bank Info during PDF generation:", {
-        accountTitle,
-        bankName,
-        bankAccount,
-      });
-
+      // Account details
       doc.setFontSize(12);
       doc.text(`Account Title: ${accountTitle || "N/A"}`, 10, finalY + 25);
       doc.text(`Bank Name: ${bankName || "N/A"}`, 10, finalY + 35);
@@ -80,6 +85,17 @@ export const GeneratePdf = (data: any) => {
     },
   });
 
-  // Save the PDF
-  doc.save("invoice.pdf");
+  // Only add the logo after everything else is rendered, and then save
+  if (imageFile) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      doc.addImage(e.target.result, "PNG", logoX, logoY, logoWidth, logoHeight);
+      // Now, save the document
+      doc.save("invoice.pdf");
+    };
+    reader.readAsDataURL(imageFile);
+  } else {
+    // If no logo is provided, just save it after rendering everything
+    doc.save("invoice.pdf");
+  }
 };

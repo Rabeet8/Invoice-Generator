@@ -15,10 +15,12 @@ export function BackgroundBeamsDemo() {
         </p>
         
         <div className="flex justify-center">
-          <Link href="/create-invoice" className="rounded-lg border border-neutral-400 bg-neutral-950 text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 px-6 py-2 text-lg font-semibold transition duration-150 ease-in-out">
-            Create Invoice
-          </Link>
-        </div>
+        <Link href="/create-invoice" className="group rounded-lg border border-neutral-400 bg-neutral-950 text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 px-6 py-2 pr-10 text-lg font-semibold transition duration-150 ease-in-out relative overflow-hidden">
+          Create Invoice
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-100 transition-all duration-300 ease-in-out group-hover:right-1">→</span>
+        </Link>
+      </div>
+
       </div>
     </div>
   );
