@@ -141,7 +141,7 @@ export function CreateInvoice() {
           </div>
 
           <div className="mt-4">
-        <Label htmlFor="footnotes">Footnotes</Label>
+        <Label htmlFor="footnotes">Note</Label>
         <textarea
           id="footnotes"
           value={footnotes}
@@ -183,17 +183,20 @@ export function CreateInvoice() {
               <LabelInputContainer className="flex-[1]">  {/* Decrease flex value for currency */}
                 <Label htmlFor={`currency-${index}`}>Currency</Label>
                 <select
-                  id={`currency-${index}`}
-                  name="currency"
-                  value={item.currency}
-                  onChange={(e) => handleItemChange(index, e)}
-                  className="border rounded-md px-2 py-1 bg-white text-black h-[2.8rem]"
-                >
-                  <option value="" className="text-gray-400 text-xs">Symbol</option>
-                  <option value="$">$</option>
-                  <option value="£">£</option>
-                  <option value="PKR">PKR</option>
-                </select>
+  id={`currency-${index}`}
+  name="currency"
+  value={item.currency}
+  onChange={(e) => handleItemChange(index, e)}
+  className="border rounded-md px-2 py-1 bg-white text-black h-[2.8rem]"
+>
+  <option value="" disabled >
+    Symbol
+  </option>
+  <option value="$">$</option>
+  <option value="£">£</option>
+  <option value="PKR">PKR</option>
+</select>
+
               </LabelInputContainer>
 
               <button

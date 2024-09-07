@@ -15,7 +15,7 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
   // Define dimensions for the logo
   const logoWidth = 15;
   const logoHeight = 10;
-  const logoX = pageWidth - 30; // Right-align the logo
+  const logoX = pageWidth - 25; // Right-align the logo
   const logoY = 12;
 
   // Add the title "Invoice" on the left with larger, bold font
@@ -40,7 +40,7 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
 
   // Draw a subtle line below the header section
   doc.setLineWidth(0.5);
-  // doc.setTextColor(lineColor[0], lineColor[1], lineColor[2]);
+  doc.setTextColor(lineColor[0], lineColor[1], lineColor[2]);
   doc.line(10, 35, 200, 35);
 
   // Invoice details
@@ -62,8 +62,6 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
     item.description || "N/A",
     `${data.currency || "$"}${item.unitPrice || "0.00"}`,  // Use selected currency symbol
   ]);
-
-  const { accountTitle, bankName, bankAccount } = data;
 
   const total = data.items.reduce(
     (sum: number, item: any) => sum + parseFloat(item.unitPrice || "0"),
@@ -94,7 +92,7 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
       // Draw a table for Bank Information
       const bankInfoColumn = ["Account Title", "Bank Name", "Bank Account"];
       const bankInfoRows = [
-        [accountTitle || "N/A", bankName || "N/A", bankAccount || "N/A"]
+        [data.accountTitle || "N/A", data.bankName || "N/A", data.bankAccount || "N/A"]
       ];
 
       (doc as any).autoTable({
