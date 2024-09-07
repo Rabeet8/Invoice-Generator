@@ -10,7 +10,7 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
   // Define subtle colors for headers and lines
   const headerColor = [22, 160, 133];
   const lineColor = [200, 200, 200];
-  const textColor = [50, 50, 50];
+  const textColor = [50];
 
   // Define dimensions for the logo
   const logoWidth = 15;
@@ -20,7 +20,7 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
 
   // Add the title "Invoice" on the left with larger, bold font
   doc.setFontSize(24);
-  doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+  doc.setTextColor(textColor[0]);
   doc.setFont("helvetica", "bold");
   doc.text("Invoice", 10, 20);
 
