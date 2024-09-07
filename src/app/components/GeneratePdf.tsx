@@ -40,7 +40,6 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
 
   // Draw a subtle line below the header section
   doc.setLineWidth(0.5);
-  doc.setTextColor(lineColor[0], lineColor[1], lineColor[2]);
   doc.line(10, 35, 200, 35);
 
   // Invoice details
