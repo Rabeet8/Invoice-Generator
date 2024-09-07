@@ -59,7 +59,7 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
     (sum: number, item: any) => sum + parseFloat(item.unitPrice || "0"),
     0
   );
-
+  const { accountTitle, bankName, bankAccount } = data;
   (doc as any).autoTable({
     head: [tableColumn],
     body: tableRows,
@@ -83,7 +83,7 @@ export const GeneratePdf = (data: any, imageFile: File | null) => {
 
   const bankInfoColumn = ["Account Title", "Bank Name", "Bank Account"];
   const bankInfoRows = [
-    [data.accountTitle || "N/A", data.bankName || "N/A", data.bankAccount || "N/A"]
+    [accountTitle || "N/A", bankName || "N/A", bankAccount || "N/A"]
   ];
 
   (doc as any).autoTable({
